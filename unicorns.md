@@ -3,12 +3,6 @@ Unicorns
 Patick Bensch
 1/4/2022
 
-<style type="text/css">
-  body{
-  font-size: 14pt;
-}
-</style>
-
 Source: Unicorn-startups-dataset, cleaned, Author: Niek van der Zwaag,
 based on a dataset shared by @ramjasmaurya,
 <https://www.kaggle.com/niekvanderzwaag/unicorn-startups-cleaned>
