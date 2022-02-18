@@ -3,14 +3,14 @@ Unicorns
 Patick Bensch
 1/4/2022
 
-Source: Unicorn-startups-dataset, cleaned, Author: Niek van der Zwaag,
-based on a dataset shared by @ramjasmaurya,
-<https://www.kaggle.com/niekvanderzwaag/unicorn-startups-cleaned>
-
-This is a short analysis of the unicorns dataset in R.The dataset
+This is a short analysis of the unicorns dataset in R. The dataset
 contains data on privately held startups that are valued at minimum of 1
 billion USD. The dataset is from 2021 and not completely up to date, as
 at least one company of that list has since gone public.
+
+Source: Unicorn-startups-dataset, cleaned, Author: Niek van der Zwaag,
+based on a dataset shared by @ramjasmaurya,
+<https://www.kaggle.com/niekvanderzwaag/unicorn-startups-cleaned>
 
 Questions:
 
@@ -74,7 +74,7 @@ I drop na values from the dataset.
 
 ## What countries have the most unicorns?
 
-Look at the list of countries in the dataset:
+First I take a look at the list of countries in the dataset:
 
     ##                 Country
     ## 1                 China
@@ -135,7 +135,7 @@ Next I plot the number of unicorns per country:
 
 As can be seen in the chart, the USA has by far the most unicorns,
 followed by China and India. Of all 45 countries, only 11 have more than
-10 unicorn, as can be seen in the following table:
+10 unicorns, as can be seen in the following table:
 
     ##           Group.1   x
     ## 1   United States 473
