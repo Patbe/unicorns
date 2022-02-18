@@ -1,7 +1,7 @@
-unicorns
+Unicorns
 ================
-
-`{r setup, include=FALSE} knitr::opts_chunk$set(echo = TRUE)`
+Patick Bensch
+1/4/2022
 
 <style type="text/css">
   body{
@@ -29,10 +29,34 @@ right into the analysis.
 
 ## Load Libraries
 
-``` {r}
+``` r
 library(tidyverse)
+```
+
+    ## -- Attaching packages --------------------------------------- tidyverse 1.3.1 --
+
+    ## v ggplot2 3.3.5     v purrr   0.3.4
+    ## v tibble  3.1.6     v dplyr   1.0.8
+    ## v tidyr   1.2.0     v stringr 1.4.0
+    ## v readr   2.1.2     v forcats 0.5.1
+
+    ## -- Conflicts ------------------------------------------ tidyverse_conflicts() --
+    ## x dplyr::filter() masks stats::filter()
+    ## x dplyr::lag()    masks stats::lag()
+
+``` r
 library(dplyr)
 library(janitor)
+```
+
+    ## 
+    ## Attache Paket: 'janitor'
+
+    ## Die folgenden Objekte sind maskiert von 'package:stats':
+    ## 
+    ##     chisq.test, fisher.test
+
+``` r
 library(ggplot2)
 library(forcats)
 ```
@@ -41,95 +65,105 @@ library(forcats)
 
 I drop na values from the dataset.
 
-\`\`\`{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+    ## 'data.frame':    927 obs. of  11 variables:
+    ##  $ X          : chr  "0" "1" "2" "3" ...
+    ##  $ Company    : chr  "Bytedance" "SpaceX" "Stripe" "Klarna" ...
+    ##  $ Valuation  : num  140 100.3 95 45.6 40 ...
+    ##  $ Date.Joined: chr  "4/7/2017" "12/1/2012" "1/23/2014" "12/12/2011" ...
+    ##  $ Country    : chr  "China" "United States" "United States" "Sweden" ...
+    ##  $ City       : chr  "Beijing" "Hawthorne" "San Francisco" "Stockholm" ...
+    ##  $ Industry   : chr  "Artificial intelligence" "Other" "Fintech" "Fintech" ...
+    ##  $ Investor.1 : chr  "Sequoia Capital China" "Founders Fund" "Khosla Ventures" "Institutional Venture Partners" ...
+    ##  $ Investor.2 : chr  "SIG Asia Investments" "Draper Fisher Jurvetson" "LowercaseCapital" "Sequoia Capital" ...
+    ##  $ Investor.3 : chr  "Sina Weibo" "Rothenberg Ventures" "capitalG" "General Atlantic" ...
+    ##  $ Investor.4 : chr  "Softbank Group" "" "" "" ...
 
-uni \<- read.csv(“Unicorn_Clean.csv”)
+## What countries have the most unicorns?
 
-uni \<- uni %>% drop_na()
+Look at the list of countries in the dataset:
 
-str(uni)
+    ##                 Country
+    ## 1                 China
+    ## 2         United States
+    ## 3                Sweden
+    ## 4             Australia
+    ## 5        United Kingdom
+    ## 6                Brazil
+    ## 7             Hong Kong
+    ## 8                 India
+    ## 9             Indonesia
+    ## 10              Germany
+    ## 11               Mexico
+    ## 12               Canada
+    ## 13               Turkey
+    ## 14          South Korea
+    ## 15          Netherlands
+    ## 16               Israel
+    ## 17             Colombia
+    ## 18              Belgium
+    ## 19            Lithuania
+    ## 20              Estonia
+    ## 21               France
+    ## 22              Austria
+    ## 23              Ireland
+    ## 24            Singapore
+    ## 25              Vietnam
+    ## 26 United Arab Emirates
+    ## 27          Switzerland
+    ## 28            Argentina
+    ## 29                Spain
+    ## 30                Japan
+    ## 31           Luxembourg
+    ## 32              Nigeria
+    ## 33          Santa Clara
+    ## 34              Finland
+    ## 35          Philippines
+    ## 36              Denmark
+    ## 37              Senegal
+    ## 38              Bermuda
+    ## 39               Norway
+    ## 40         South Africa
+    ## 41                Chile
+    ## 42             Thailand
+    ## 43             Malaysia
+    ## 44       Czech Republic
+    ## 45              Croatia
 
+</br > There are in total 45 Countries in the dataset.
 
+</br > </br >
 
-    ## What countries have the most unicorns?
+Next I plot the number of unicorns per country:
 
-    Look at the list of countries in the dataset:
+![](unicorns_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
 
+</br >
 
-    ```{r countries_group, echo=FALSE}
-    distinct(uni,Country)
+As can be seen in the chart, the USA has by far the most unicorns,
+followed by China and India. Of all 45 countries, only 11 have more than
+10 unicorn, as can be seen in the following table:
 
-\`\`\`{r include=FALSE}
-
-# get the number of countries
-
-countries \<- uni %>% distinct(Country)
-
-countries
-
-num_countries \<- NROW(countries$Country) num_countries
-
-
-    </br >
-    There are in total `r num_countries` Countries in the dataset.
-
-
-    ```{r companies_by_country, include=FALSE}
-
-    # startup companies by country
-
-    n_uni_country <- aggregate(uni$Company, by =list(uni$Country), FUN=length)
-
-\`\`\`{r country_by_country_sort, include=FALSE}
-
-# sort with arrange
-
-n_uni_country_2 \<-n_uni_country %>% arrange(-x) %>% # First sort by
-val. This sort the dataframe but NOT the factor levels
-mutate(country=factor(Group.1, levels=Group.1))
-
-n_uni_country_2
-
-
-
-    </br >
-    </br >
-
-
-    Next I plot the number of unicorns per country:
-
-
-    ```{r echo=FALSE}
-    n <- ggplot(data=n_uni_country_2)+geom_count(aes(x=country,y=x,color = Group.1),show.legend = FALSE) +
-       theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
-    #+
-     # theme(legend.position="bottom")
-     
-
-\`\`\`{r echo=FALSE}
-
-## override count with the command stat=“identity”
-
-n2 \<- ggplot(data=n_uni_country_2)+geom_bar(stat = “identity”,
-aes(x=country,y=x,fill = Group.1),show.legend = FALSE) +
-theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))+
-ylab(“number of unicorns”) #+ # theme(legend.position=“bottom”)
-
-n2
-
-
-    </br >
-
-    As can be seen in the chart, the USA has by far the most unicorns, followed by China and India. 
-    Of all 45 countries, only 11 have more than 10 unicorn, as can be seen in the following table:
-
-    ```{r unicorns_country_top15, echo=FALSE}
-    # slice the top 15
-
-    n_uni_country_3 <- n_uni_country_2 %>% 
-      select(Group.1,x) %>% 
-      slice(1:20)
-    n_uni_country_3
+    ##           Group.1   x
+    ## 1   United States 473
+    ## 2           China 167
+    ## 3           India  50
+    ## 4  United Kingdom  36
+    ## 5         Germany  23
+    ## 6          Israel  21
+    ## 7          France  19
+    ## 8          Brazil  15
+    ## 9          Canada  15
+    ## 10      Singapore  11
+    ## 11    South Korea  11
+    ## 12      Hong Kong   7
+    ## 13      Australia   6
+    ## 14          Japan   6
+    ## 15      Indonesia   5
+    ## 16         Mexico   5
+    ## 17    Netherlands   5
+    ## 18          Spain   4
+    ## 19         Sweden   4
+    ## 20    Switzerland   4
 
 </br >
 
@@ -141,75 +175,29 @@ increasing economic importance of the continent.
 
 ## Market Values
 
-\`\`\`{r include=FALSE}
+The total market value of all unicorns is 3050.93 billion USD. Since
+there are overall 927 companies with market values in the dataset, the
+average value of a unicorn is around 3 billion USD. </br >
 
-# prepare data for charts
+Next I want to see a visualization of the largest unicorns, a horizontal
+bar chart would be suitable for that.
 
-new_df \<-
-aggregate(uni*V**a**l**u**a**t**i**o**n*, *l**i**s**t*(*u**n**i*Industry),
-FUN=sum) new_df \<- new_df %>% arrange(-x)
+I set the cutoff at 20 to keep the chart neat.
 
-slices \<- new_df$x
+</br >
 
-total_value \<-sum(slices) number_companies \<-
-sum(complete.cases(uni$Company)) avg_value_company \<-
-floor(total_value/number_companies)
-
-
-    The total market value of all unicorns is `r total_value` billion USD. Since there are overall `r number_companies` companies with market values in the dataset, the average value of a unicorn is around `r avg_value_company` billion USD.
-    </br >
-
-    Next I want to see a visualization of the largest unicorns, a horizontal bar chart would be suitable for that.
-
-    I set the cutoff at 20 to keep the chart neat.
-
-    </br >
-
-
-    ```{r barchart_companies, echo=FALSE}
-    top_20 <- uni %>%
-      arrange(desc(Valuation)) %>% 
-      slice(1:20)
-      
-    barChart_company <-ggplot(top_20, aes(x=reorder(Company,Valuation),Valuation,labels=floor(Valuation))) +   
-      
-
-      geom_bar(stat = "identity",fill="lightblue") + coord_flip() + 
-        geom_text(aes(label = floor(Valuation)),color="black")+ggtitle("Market Value in Billion USD by Company")+ 
-            xlab("Company")+ylab("Market Value")
-
-    barChart_company
+![](unicorns_files/figure-gfm/barchart_companies-1.png)<!-- -->
 
 Next, I want to see what industries hold the highest market values. For
 that, I create a pie chart to visualize the percentages.
 
-\`\`\`{r data_piechart_industries, include=FALSE}
-
-percent \<- round(slices/sum(slices)\*100)
-
-ind \<- new_df$Group.1  
-lbls\<- paste(ind,percent) lbls \<- paste(lbls,“%”,sep=““)
-
-
-    ```{r piechart_industries, echo=FALSE, results='hide'}
-    pieChart <- pie(slices, labels = lbls, main="Industries",radius=1.05, cex = 0.6)
-    pieChart
+![](unicorns_files/figure-gfm/piechart_industries-1.png)<!-- -->
 
 It can be seen that fintech accounts for the largest share in terms of
 market value. Next I look at the absolute values with a horizontal bar
 chart:
 
-\`\`\`{r barchart_industries, echo=FALSE} # add the fill at geom_bar,
-not the AES, otherwise it would be assigned to variables
-
-barChart \<-ggplot(new_df, aes(x=reorder(Group.1,x),x,labels=floor(x)))
-+
-
-geom_bar(stat = “identity”,fill=“lightblue”) + coord_flip() +
-geom_text(aes(label = floor(x)),color=“black”)+ggtitle(“Market Value in
-Billion USD by Industry”)+ ylab(“Market Value”) + xlab(“Industry”)
-
-barChart \`\`\`
+![](unicorns_files/figure-gfm/barchart_industries-1.png)<!-- -->
 
 Overall more than 50 percent of all market value in the dataset is
 concentrated in technology related industries.
